@@ -5,8 +5,8 @@ return [
     'scopes' => explode(',', env('SCOPES')),
     'host' => env('HOST'),
     'rest_api_version' => env('SHOPIFY_REST_API_VERSION', '2022-10'),
-    'graph_api_version' => env('SHOPIFY_GRAPH_API_VERSION', '2022-10'),'api_version' => '2021-01',
-
+    'graph_api_version' => env('SHOPIFY_GRAPH_API_VERSION', '2022-10'),
+    'api_version' => env('SHOPIFY_REST_API_VERSION', '2022-01'),
 
 
     'redirect_url' => env('SHOPIFY_REDIRECT_URL'),

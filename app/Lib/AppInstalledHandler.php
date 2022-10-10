@@ -2,12 +2,12 @@
 
 namespace App\Lib;
 
+use App\Models\Auth\User;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Secomapp\Contracts\ClientApiContract;
 use Secomapp\Models\Plan;
 use Secomapp\Models\Shop;
-use Secomapp\Models\User;
 use Secomapp\Traits\Authenticator;
 use Secomapp\Traits\ChargeCreator;
 use Secomapp\Traits\InstalledShop;
@@ -79,11 +79,8 @@ class AppInstalledHandler
             ]);
         }
         // Save shop info
-        $clientApi = generateClientApi($shop);
-        $this->clientApi()->setShopName($shop);
-        $this->clientApi()->setAccessToken($accessToken);
         $user = $this->findOrCreateUser($shop);
-        $shopInfo = $this->pullShopInfo($shop);
+        $shopInfo = $this->getShopInfoAndSave($shop);
         $user->updateFromShopInfo($shopInfo)->save();
         auth()->login($user);
         // Subscribe default plan
@@ -98,7 +95,7 @@ class AppInstalledHandler
                 ->log('free forever plan started');
         }
         return OAuth::begin(
-            $shop,
+            $shop->shop,
             '/auth/callback',
             true,
             [CookieHandler::class, 'saveShopifyCookie']
@@ -137,13 +134,25 @@ class AppInstalledHandler
 
     /**
      * @param $shop
-     * @return Builder|Model|User
+     * @return User
      */
-    protected function findOrCreateUser($shop)
+    protected function findOrCreateUser($shop): User
     {
         return User::firstOrCreate([
             'shop_id' => $shop->id,
             'shop_name' => shopNameFromDomain($shop->shop),
         ]);
+    }
+
+    public function getShopInfoAndSave(Shop $shop)
+    {
+        $clientApi = generateClientApi($shop);
+        $shopApi = new \Secomapp\Resources\Shop($clientApi);
+        try {
+            $response = $shopApi->get();
+            return $this->saveShopInfo($shop, $response);
+        } catch (Exception $exception) {
+            return false;
+        }
     }
 }
