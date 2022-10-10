@@ -79,6 +79,7 @@ class AppInstalledHandler
             ]);
         }
         // Save shop info
+        $clientApi = generateClientApi($shop);
         $this->clientApi()->setShopName($shop);
         $this->clientApi()->setAccessToken($accessToken);
         $user = $this->findOrCreateUser($shop);

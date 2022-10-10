@@ -15,7 +15,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "shopify/shopify-api": "^4.0",
-        "secomapp/laravel-shopify": "^4.7"
+        "secomapp/laravel-shopify": "^4.6"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
