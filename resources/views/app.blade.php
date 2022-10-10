@@ -18,7 +18,7 @@
             const {host, apiKey} = root.dataset;
             const AppBridge = window['app-bridge'];
             const createApp = AppBridge.default;
-            const app = createApp({apiKey, host});
+            createApp({ apiKey, host, forceRedirect: true });
         }
     }, 2e3)
 </script>

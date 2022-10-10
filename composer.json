@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^7.4",
@@ -11,7 +14,8 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "shopify/shopify-api": "^4.0"
+        "shopify/shopify-api": "^4.0",
+        "secomapp/laravel-shopify": "^4.7"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -21,12 +25,21 @@
         "nunomaduro/collision": "^5.10",
         "phpunit/phpunit": "^9.5.10"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@gitlab.com:secomapp/development/laravel-shopify.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Utils/heplers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

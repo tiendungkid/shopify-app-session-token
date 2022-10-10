@@ -12,6 +12,7 @@ use Shopify\Context;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidOAuthException;
+use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthCookieNotFoundException;
 use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\PrivateAppException;
@@ -69,6 +70,7 @@ class ShopifyAuthController extends Controller
      * @throws OAuthCookieNotFoundException
      * @throws HttpRequestException
      * @throws InvalidOAuthException
+     * @throws MissingArgumentException|CookieSetException
      */
     public function authCallback(Request $request)
     {
@@ -80,24 +82,26 @@ class ShopifyAuthController extends Controller
         $host = $request->query('host');
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $handler = new AppInstalledHandler;
-        $handler->saveShopInstallInfo($shop, $session->getAccessToken());
-        return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop]));
+        if ($handler->appInstalled($shop)) {
+            return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop]));
+        }
+        $installUrl = $handler->installShop($shop, $session->getAccessToken());
+        return redirect($installUrl);
     }
 
+    /**
+     * @throws HttpRequestException
+     * @throws MissingArgumentException
+     */
     public function fallbackRoute(Request $request)
     {
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $host = $request->query('host');
         $apiKey = Context::$API_KEY;
-        $appInstalled = Session::query()->where('shop', $shop)->exists();
-        if ($appInstalled) {
-            return view('app', compact('shop', 'host', 'apiKey'));
-        }
-        return redirect("/login?shop=$shop");
-    }
-
-    public function dashboard()
-    {
-        return view('dashboard');
+        $handler = new AppInstalledHandler;
+        $installed = $handler->appInstalled($shop);
+        return $installed
+            ? view('app', compact('shop', 'host', 'apiKey'))
+            : redirect("/login?shop=$shop");
     }
 }

@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Context::initialize(
             config('shopify.api_key'),
-            config('shopify.secret_key'),
+            config('shopify.shared_secret'),
             config('shopify.scopes'),
             str_replace('https://', '', config('shopify.host')),
             new DbSessionStorage()

@@ -8,5 +8,3 @@ Route::get('login/toplevel', [ShopifyAuthController::class, 'loginToplevel'])->n
 Route::get('auth/callback', [ShopifyAuthController::class, 'authCallback']);
 
 Route::fallback([ShopifyAuthController::class, 'fallbackRoute']);
-
-Route::get('dashboard', [ShopifyAuthController::class, 'dashboard']);
