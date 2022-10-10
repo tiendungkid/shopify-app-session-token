@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Lib\AppInstalledHandler;
 use App\Lib\CookieHandler;
-use App\Models\Auth\Session;
 use Illuminate\Http\Request;
 use Shopify\Auth\OAuth;
 use Shopify\Context;
