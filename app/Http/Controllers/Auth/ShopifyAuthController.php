@@ -85,7 +85,7 @@ class ShopifyAuthController extends Controller
             return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop]));
         }
         $handler->installShop($shop, $session->getAccessToken());
-        return redirect("?" . http_build_query(['host' => $host, 'shop' => $shop]));
+        return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop]));
     }
 
     /**
@@ -100,7 +100,7 @@ class ShopifyAuthController extends Controller
         $handler = new AppInstalledHandler;
         $installed = $handler->appInstalled($shop);
         return $installed
-            ? view('app', compact('shop', 'host', 'apiKey'))
+            ? view('pages.star-page', compact('shop', 'host', 'apiKey'))
             : redirect("/login?shop=$shop");
     }
 }
