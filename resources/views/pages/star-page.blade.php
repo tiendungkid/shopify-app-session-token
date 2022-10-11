@@ -1,6 +1,4 @@
 @extends('app')
 @section('content')
-    <a href="{{ route('dashboard') }}">
-        Open dashboard
-    </a>
+    <button id="open-app">Open uppromote app</button>
 @endsection

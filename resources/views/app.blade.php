@@ -11,4 +11,5 @@
 <div id="app" data-shop="{{ $shop }}" data-api-key="{{ $apiKey }}" data-host="{{ $host }}"></div>
 @yield('content')
 @include('includes.app-bridge')
+@include('includes.script')
 </body>
