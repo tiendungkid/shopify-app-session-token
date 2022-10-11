@@ -12,14 +12,25 @@
     App loading ...
 </div>
 <script>
-    setTimeout(function () {
-        const root = document.getElementById('app')
-        if (root) {
-            const {host, apiKey} = root.dataset;
-            const AppBridge = window['app-bridge'];
-            const createApp = AppBridge.default;
-            createApp({ apiKey, host, forceRedirect: true });
-        }
-    }, 2e3)
+    const root = document.getElementById('app')
+    const {host, apiKey} = root.dataset
+    const AppBridge = window['app-bridge']
+    const AppBridgeUtils = window['app-bridge-utils']
+    const createApp = AppBridge.default
+    const app = createApp({apiKey, host, forceRedirect: true})
+
+    async function getSessionToken(app) {
+        return await AppBridgeUtils.getSessionToken(app)
+    }
+
+    getSessionToken(app).then(res => {
+        window.sessionToken = res
+    })
+
+    setInterval(() => {
+        getSessionToken(app).then(res => {
+            window.sessionToken = res
+        })
+    }, 3e4)
 </script>
 </body>

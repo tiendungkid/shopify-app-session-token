@@ -4,14 +4,11 @@ namespace App\Lib;
 
 use App\Models\Auth\User;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Secomapp\Models\Plan;
 use Secomapp\Models\Shop;
 use Secomapp\Traits\Authenticator;
 use Secomapp\Traits\ChargeCreator;
 use Secomapp\Traits\InstalledShop;
-use Shopify\Auth\OAuth;
 use Shopify\Clients\Graphql;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
@@ -62,15 +59,13 @@ class AppInstalledHandler
     public function installShop(
         string $shop,
         string $accessToken
-    ): string
+    )
     {
         /** @var Shop $shop */
         $shop = Shop::query()->where('shop', '=', $shop)->first();
         if ($shop) {
-            if (!$shop->uninstalled()) {
-                $shop->uninstall();
-            }
-            $shop->install($accessToken);
+            if (!$shop->uninstalled()) $this->uninstallApp($shop);
+            $shop->install($accessToken)->save();
         } else {
             $shop = Shop::query()->create([
                 'shop' => $shop,
@@ -94,12 +89,6 @@ class AppInstalledHandler
                 ->withProperties(['layer' => 'app', 'shop' => $shop])
                 ->log('free forever plan started');
         }
-        return OAuth::begin(
-            $shop->shop,
-            '/auth/callback',
-            true,
-            [CookieHandler::class, 'saveShopifyCookie']
-        );
         // TODO: Register uninstall webhook
         // TODO: Trigger event AppInstalled
         // TODO: Dispatch PublishThemeJob
@@ -154,5 +143,11 @@ class AppInstalledHandler
         } catch (Exception $exception) {
             return false;
         }
+    }
+
+    private function uninstallApp(Shop $shop)
+    {
+        $shop->uninstall()->deactivate()->save();
+        // TODO: Call uninstall listener api
     }
 }

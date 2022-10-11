@@ -84,8 +84,8 @@ class ShopifyAuthController extends Controller
         if ($handler->appInstalled($shop)) {
             return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop]));
         }
-        $installUrl = $handler->installShop($shop, $session->getAccessToken());
-        return redirect($installUrl);
+        $handler->installShop($shop, $session->getAccessToken());
+        return redirect("?" . http_build_query(['host' => $host, 'shop' => $shop]));
     }
 
     /**
