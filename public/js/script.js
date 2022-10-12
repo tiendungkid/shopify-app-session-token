@@ -18,7 +18,8 @@ class Uppromote {
 				{}
 			)
 			response.then((res) => {
-				console.log(res)
+				const data = JSON.parse(res.data)
+				window.open(data.redirect_url)
 			})
 		})
 	}

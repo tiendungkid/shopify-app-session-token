@@ -29,7 +29,8 @@ class AppController extends Controller
                 'User-Name' => 'embed_app',
                 'Shopify-Authenticate' => str_replace('Bearer ', '', $request->header('Authorization', '')),
                 'Shop-Url' => $session->getShop()
-            ]
+            ],
+            json_encode(['shop_url' => $session->getShop()])
         ]);
         $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app',
             [RequestOptions::JSON => ['shop_url' => $session->getShop()]]);
