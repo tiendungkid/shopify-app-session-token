@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Secomapp\Models\User::class,
+            'model' => \App\Models\Auth\User::class,
         ],
 
         // 'users' => [

@@ -60,7 +60,6 @@ class AppInstalledHandler
         $user = $this->findOrCreateUser($shopModel);
         $shopInfo = $this->getShopInfoAndSave($shopModel);
         $user->updateFromShopInfoExtended($shopInfo)->save();
-        auth()->login($user);
         // Subscribe default plan
         $shopModel->deactivate();
         $plan = Plan::find(2);
