@@ -31,7 +31,8 @@ class AppController extends Controller
                 'Shop-Url' => $session->getShop()
             ]
         ]);
-        $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app');
+        $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app',
+            [RequestOptions::JSON => ['shop_url' => $session->getShop()]]);
         $data = $response->getBody()->getContents();
         return response()->json(compact('data'));
     }

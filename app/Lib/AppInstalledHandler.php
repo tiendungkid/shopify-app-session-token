@@ -61,32 +61,32 @@ class AppInstalledHandler
         string $accessToken
     )
     {
-        /** @var Shop $shop */
-        $shop = Shop::query()->where('shop', '=', $shop)->first();
-        if ($shop) {
-            if (!$shop->uninstalled()) $this->uninstallApp($shop);
-            $shop->install($accessToken)->save();
+        /** @var Shop $shopModel */
+        $shopModel = Shop::query()->where('shop', '=', $shop)->first();
+        if ($shopModel) {
+            if (!$shopModel->uninstalled()) $this->uninstallApp($shopModel);
+            $shopModel->install($accessToken)->save();
         } else {
-            $shop = Shop::query()->create([
+            $shopModel = Shop::query()->create([
                 'shop' => $shop,
                 'access_token' => $accessToken,
                 'installed_at' => now(),
             ]);
         }
         // Save shop info
-        $user = $this->findOrCreateUser($shop);
-        $shopInfo = $this->getShopInfoAndSave($shop);
+        $user = $this->findOrCreateUser($shopModel);
+        $shopInfo = $this->getShopInfoAndSave($shopModel);
         $user->updateFromShopInfo($shopInfo)->save();
         auth()->login($user);
         // Subscribe default plan
-        $shop->deactivate();
+        $shopModel->deactivate();
         $plan = Plan::find(2);
-        $subscription = $shop->newSubscription($plan)->create();
-        $shop->activate($subscription->starts_at)->save();
+        $subscription = $shopModel->newSubscription($plan)->create();
+        $shopModel->activate($subscription->starts_at)->save();
         if (!session('sudo', false)) {
             activity()
                 ->causedBy(auth()->user())
-                ->withProperties(['layer' => 'app', 'shop' => $shop])
+                ->withProperties(['layer' => 'app', 'shop' => $shopModel])
                 ->log('free forever plan started');
         }
         // TODO: Register uninstall webhook
