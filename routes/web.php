@@ -3,7 +3,8 @@
 use App\Http\Controllers\Auth\ShopifyAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('login', [ShopifyAuthController::class, 'login'])->name('login');
+Route::get('login', [ShopifyAuthController::class, 'login'])
+    ->name('login');
 Route::get('login/toplevel', [ShopifyAuthController::class, 'loginToplevel'])->name('login.toplevel');
 Route::get('auth/callback', [ShopifyAuthController::class, 'authCallback']);
 
