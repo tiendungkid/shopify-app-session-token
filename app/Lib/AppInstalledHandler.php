@@ -9,12 +9,8 @@ use Secomapp\Models\Shop;
 use Secomapp\Traits\Authenticator;
 use Secomapp\Traits\InstalledShop;
 use Shopify\Clients\Graphql;
-use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\MissingArgumentException;
-use Shopify\Exception\PrivateAppException;
-use Shopify\Exception\SessionStorageException;
-use Shopify\Exception\UninitializedContextException;
 
 class AppInstalledHandler
 {
@@ -40,10 +36,8 @@ class AppInstalledHandler
     QUERY;
 
     /**
-     * @throws CookieSetException
-     * @throws UninitializedContextException
-     * @throws PrivateAppException
-     * @throws SessionStorageException
+     * @param string $shop
+     * @param string $accessToken
      */
     public function installShop(
         string $shop,
