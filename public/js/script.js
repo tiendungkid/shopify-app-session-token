@@ -13,7 +13,7 @@ class Uppromote {
 		const openAppButton = document.getElementById('open-app')
 		openAppButton.addEventListener('click', () => {
 			const response = this.fetchAndGetContent(
-				'/api/auth/login',
+				`/api/auth/login?shop=${this.shop}`,
 				'POST',
 				{}
 			)
