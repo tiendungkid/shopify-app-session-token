@@ -94,6 +94,7 @@ class ShopifyAuthController extends Controller
      */
     public function fallbackRoute(Request $request)
     {
+        abort_if(!$request->query('shop'), 404);
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $host = $request->query('host');
         $apiKey = Context::$API_KEY;
