@@ -60,7 +60,10 @@ class EnsureShopifySession
 
         if ($session && $shop && $session->getShop() !== $shop) {
             // This request is for a different shop. Go straight to login
-            return redirect("/login?shop=$shop");
+            return response()->json([
+                'data' => "/login?shop=$shop",
+                'type' => 'redirect'
+            ]);
         }
 
         if ($session && $session->isValid()) {
