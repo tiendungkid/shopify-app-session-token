@@ -7,7 +7,6 @@ use Exception;
 use Secomapp\Models\Plan;
 use Secomapp\Models\Shop;
 use Secomapp\Traits\Authenticator;
-use Secomapp\Traits\ChargeCreator;
 use Secomapp\Traits\InstalledShop;
 use Shopify\Clients\Graphql;
 use Shopify\Exception\CookieSetException;
@@ -19,26 +18,16 @@ use Shopify\Exception\UninitializedContextException;
 
 class AppInstalledHandler
 {
-    use InstalledShop, ChargeCreator, Authenticator {
-        InstalledShop::clientApi insteadof ChargeCreator;
+    use InstalledShop, Authenticator {
         InstalledShop::clientApi insteadof Authenticator;
-        InstalledShop::shop insteadof ChargeCreator;
         InstalledShop::shop insteadof Authenticator;
-        InstalledShop::shopPlan insteadof ChargeCreator;
         InstalledShop::shopPlan insteadof Authenticator;
-        InstalledShop::shopId insteadof ChargeCreator;
         InstalledShop::shopId insteadof Authenticator;
-        InstalledShop::shopName insteadof ChargeCreator;
         InstalledShop::shopName insteadof Authenticator;
-        InstalledShop::pullThemeInfo insteadof ChargeCreator;
         InstalledShop::pullThemeInfo insteadof Authenticator;
-        InstalledShop::homepage insteadof ChargeCreator;
         InstalledShop::homepage insteadof Authenticator;
-        InstalledShop::hasSession insteadof ChargeCreator;
         InstalledShop::hasSession insteadof Authenticator;
-        InstalledShop::initSession insteadof ChargeCreator;
         InstalledShop::initSession insteadof Authenticator;
-        InstalledShop::hasAvailableCoupon insteadof ChargeCreator;
         InstalledShop::hasAvailableCoupon insteadof Authenticator;
     }
 
@@ -76,7 +65,7 @@ class AppInstalledHandler
         // Save shop info
         $user = $this->findOrCreateUser($shopModel);
         $shopInfo = $this->getShopInfoAndSave($shopModel);
-        $user->updateFromShopInfo($shopInfo)->save();
+        $user->updateFromShopInfoExtended($shopInfo)->save();
         auth()->login($user);
         // Subscribe default plan
         $shopModel->deactivate();

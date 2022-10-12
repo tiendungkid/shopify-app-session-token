@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Lib\DbSessionStorage;
 use Illuminate\Support\ServiceProvider;
+use Secomapp\ClientApi;
+use Secomapp\Contracts\ClientApiContract;
 use Shopify\Context;
 use Shopify\Exception\MissingArgumentException;
 
@@ -31,5 +33,22 @@ class AppServiceProvider extends ServiceProvider
             str_replace('https://', '', config('shopify.host')),
             new DbSessionStorage()
         );
+        $this->app->bind(ClientApiContract::class, function () {
+            return $this->clientApi();
+        });
+    }
+
+    /**
+     * @return ClientApiContract
+     */
+    protected function clientApi()
+    {
+        $clientApi = session('client_api');
+        if (!$clientApi) {
+            $clientApi = new ClientApi(config('shopify.shared_secret'), config('shopify.api_version'));
+            session(['client_api' => $clientApi]);
+        }
+
+        return $clientApi;
     }
 }
