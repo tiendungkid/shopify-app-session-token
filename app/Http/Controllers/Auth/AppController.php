@@ -32,9 +32,7 @@ class AppController extends Controller
             ]
         ]);
         $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app');
-        $result = $response->getBody()->getContents();
-        return response()->json([
-            'data' => $result
-        ]);
+        $data = $response->getBody()->getContents();
+        return response()->json(compact('data'));
     }
 }
