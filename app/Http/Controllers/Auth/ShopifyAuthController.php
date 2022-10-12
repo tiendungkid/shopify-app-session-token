@@ -29,7 +29,7 @@ class ShopifyAuthController extends Controller
      */
     public function login(Request $request)
     {
-        $shop = Utils::sanitizeShopDomain($request->query('shop'));
+        $shop = Utils::sanitizeShopDomain($request->get('shop'));
         if (!$request->hasCookie('shopify_top_level_oauth')) {
             return redirect()->route('login.toplevel', ['shop' => $shop]);
         }
