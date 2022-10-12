@@ -69,7 +69,7 @@ class ShopifyAuthController extends Controller
      * @throws OAuthCookieNotFoundException
      * @throws HttpRequestException
      * @throws InvalidOAuthException
-     * @throws MissingArgumentException|CookieSetException
+     * @throws MissingArgumentException
      */
     public function authCallback(Request $request)
     {
@@ -100,7 +100,7 @@ class ShopifyAuthController extends Controller
         $handler = new AppInstalledHandler;
         $installed = $handler->appInstalled($shop);
         return $installed
-            ? view('pages.star-page', compact('shop', 'host', 'apiKey'))
+            ? view('pages.start-page', compact('shop', 'host', 'apiKey'))
             : redirect("/login?shop=$shop");
     }
 }
