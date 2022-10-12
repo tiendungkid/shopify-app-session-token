@@ -15,7 +15,9 @@ class Uppromote {
 			const response = this.fetchAndGetContent(
 				`/api/auth/login?shop=${this.shop}`,
 				'POST',
-				{}
+				{
+					shop: this.shop,
+				}
 			)
 			response.then((res) => {
 				const data = JSON.parse(res.data)
