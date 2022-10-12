@@ -1,5 +1,6 @@
 <?php
 return [
+    'uppromote_app_url' => env('UPPROMOTE_APP_URL'),
     'api_key' => env('SHOPIFY_API_KEY'),
     'shared_secret' => env('SHOPIFY_SHARED_SECRET'),
     'scopes' => explode(',', env('SCOPES')),
@@ -7,7 +8,6 @@ return [
     'rest_api_version' => env('SHOPIFY_REST_API_VERSION', '2022-10'),
     'graph_api_version' => env('SHOPIFY_GRAPH_API_VERSION', '2022-10'),
     'api_version' => env('SHOPIFY_REST_API_VERSION', '2022-01'),
-
 
     'redirect_url' => env('SHOPIFY_REDIRECT_URL'),
     'permissions' => [

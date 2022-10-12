@@ -1,33 +1,62 @@
 class Uppromote {
-    constructor() {
-        this.root = document.getElementById('app')
-        this.loginButton = document.getElementById('open-app')
-        this.shop = this.root.dataset.shop
-        this.addEventListener()
-    }
+	constructor({ shop, apiKey, host }) {
+		this.shop = shop
+		this.apiKey = apiKey
+		this.host = host
+	}
 
-    addEventListener() {
-        this.loginButton.addEventListener('click', () => {
-            axios.post('https://secomapp-affiliate.test/api/v1/login-app',
-                {
-                    shop_url: this.shop,
-                },
-                {
-                    headers: {
-                        'api-key': 'ygdUqNaGzhyn5636',
-                        'user-name': 'embed_app',
-                        'shopify-authenticate': `Bearer ${window.sessionToken}`,
-                        'shop-url': this.shop,
-                    },
-                })
-                .then(function(response) {
-                    console.log(response)
-                })
-                .catch(function(error) {
-                    console.log(error)
-                })
-        })
-    }
+	initialize() {
+		this.addEventListener()
+	}
+
+	addEventListener() {
+		const openAppButton = document.getElementById('open-app')
+		openAppButton.addEventListener('click', () => {
+			const response = this.fetchAndGetContent(
+				'/api/auth/login',
+				'POST',
+				{}
+			)
+			response.then((res) => {
+				console.log(res)
+			})
+		})
+	}
+
+	/**
+	 * Fetch content
+	 * @param url
+	 * @param method
+	 * @param body
+	 * @returns {Promise<null>}
+	 */
+	async fetchAndGetContent(url = '', method = 'GET', body = {}) {
+		if (['GET', 'HEAD'].includes(method)) {
+			const getUrl = new URL(url)
+			const bodyParams = new URLSearchParams(body)
+			const urlParams = url.searchParams
+			const allParameters = new URLSearchParams({
+				...Object.fromEntries(bodyParams),
+				...Object.fromEntries(urlParams),
+			})
+			const response = await fetch(
+				`${getUrl.origin}${getUrl.pathname}?${allParameters.toString()}`
+			)
+			return (await response.json()) || null
+		}
+		const formData = new FormData()
+		Object.keys(body).forEach((key) => formData.append(key, body[key]))
+		const response = await fetch(url, {
+			method,
+			headers: {
+				Authorization: `Bearer ${window.sessionToken}`,
+			},
+			body: formData,
+		})
+		return (await response.json()) || null
+	}
 }
 
-new Uppromote()
+const appRoot = document.getElementById('app')
+const uppromote = new Uppromote({ ...appRoot.dataset })
+uppromote.initialize()
