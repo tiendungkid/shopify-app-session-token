@@ -8,7 +8,9 @@
     <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
 </head>
 <body>
-<div id="app" data-shop="{{ $shop }}" data-api-key="{{ $apiKey }}" data-host="{{ $host }}" data-shop-origin="{{ $shop }}"></div>
+<div id="app" data-shop="{{ $shop }}" data-api-key="{{ $apiKey }}" data-host="{{ $host }}"
+     data-shop-origin="{{ $shop }}" data-just-installed="{{ $justInstalled }}">
+</div>
 @yield('content')
 @include('includes.app-bridge')
 @include('includes.script')

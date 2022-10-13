@@ -4,6 +4,9 @@ namespace App\Lib;
 
 use App\Models\Auth\User;
 use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 use Secomapp\Models\Plan;
 use Secomapp\Models\Shop;
 use Secomapp\Traits\Authenticator;
@@ -60,20 +63,6 @@ class AppInstalledHandler
         $user = $this->findOrCreateUser($shopModel);
         $shopInfo = $this->getShopInfoAndSave($shopModel);
         $user->updateFromShopInfoExtended($shopInfo)->save();
-        // Subscribe default plan
-        $shopModel->deactivate();
-        $plan = Plan::find(2);
-        $subscription = $shopModel->newSubscription($plan)->create();
-        $shopModel->activate($subscription->starts_at)->save();
-        if (!session('sudo', false)) {
-            activity()
-                ->causedBy(auth()->user())
-                ->withProperties(['layer' => 'app', 'shop' => $shopModel])
-                ->log('free forever plan started');
-        }
-        // TODO: Register uninstall webhook
-        // TODO: Trigger event AppInstalled
-        // TODO: Dispatch PublishThemeJob
     }
 
     /**

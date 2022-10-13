@@ -1,8 +1,8 @@
 class Uppromote {
-	constructor({ shop, apiKey, host }) {
+	constructor({ shop, host, justInstalled }) {
 		this.shop = shop
-		this.apiKey = apiKey
 		this.host = host
+		this.justInstalled = justInstalled
 	}
 
 	initialize() {
@@ -11,15 +11,20 @@ class Uppromote {
 
 	addEventListener() {
 		const openAppButton = document.getElementById('open-app')
+		if (!openAppButton) return
 		openAppButton.addEventListener('click', () => {
 			const response = this.fetchAndGetContent(
 				`/api/auth/login?shop=${this.shop}`,
 				'POST',
 				{
 					shop: this.shop,
+					just_installed: this.justInstalled,
 				}
 			)
 			response.then((res) => {
+				if (this.justInstalled) {
+					window.open(res.data)
+				}
 				const data = JSON.parse(res.data)
 				window.open(data.redirect_url)
 			})
