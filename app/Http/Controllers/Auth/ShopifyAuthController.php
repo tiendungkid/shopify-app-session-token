@@ -69,7 +69,6 @@ class ShopifyAuthController extends Controller
      * @throws OAuthCookieNotFoundException
      * @throws HttpRequestException
      * @throws InvalidOAuthException
-     * @throws MissingArgumentException
      */
     public function authCallback(Request $request)
     {
@@ -81,9 +80,6 @@ class ShopifyAuthController extends Controller
         $host = $request->query('host');
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $handler = new AppInstalledHandler;
-        if ($handler->appInstalled($shop)) {
-            return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop, 'just_installed' => 0]));
-        }
         $handler->installShop($shop, $session->getAccessToken());
         return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop, 'just_installed' => 1]));
     }

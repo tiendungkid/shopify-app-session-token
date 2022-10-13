@@ -22,11 +22,7 @@ class Uppromote {
 				}
 			)
 			response.then((res) => {
-				if (this.justInstalled) {
-					window.open(res.data)
-				}
-				const data = JSON.parse(res.data)
-				window.open(data.redirect_url)
+				window.open(res.redirect_url)
 			})
 		})
 	}

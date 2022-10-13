@@ -59,7 +59,6 @@ class AppInstalledHandler
                 'installed_at' => now(),
             ]);
         }
-        // Save shop info
         $user = $this->findOrCreateUser($shopModel);
         $shopInfo = $this->getShopInfoAndSave($shopModel);
         $user->updateFromShopInfoExtended($shopInfo)->save();

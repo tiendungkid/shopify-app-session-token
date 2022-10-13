@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
@@ -37,21 +38,26 @@ class AppController extends Controller
                 str_replace('Bearer ', '', $request->header('Authorization', ''))
             );
         }
-        $client = new Client([
-            'allow_redirects' => false,
-            'verify' => false,
-            RequestOptions::HEADERS => [
-                'Api-Key' => $this->apiKey,
-                'User-Name' => 'embed_app',
-                'Shopify-Authenticate' => str_replace('Bearer ', '', $request->header('Authorization', '')),
-                'Shop-Url' => $session->getShop()
-            ],
-            json_encode(['shop_url' => $session->getShop()])
-        ]);
-        $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app',
-            [RequestOptions::JSON => ['shop_url' => $session->getShop()]]);
-        $data = $response->getBody()->getContents();
-        return response()->json(compact('data'));
+        try {
+            $client = new Client([
+                'allow_redirects' => false,
+                'verify' => false,
+                RequestOptions::HEADERS => [
+                    'Api-Key' => $this->apiKey,
+                    'User-Name' => 'embed_app',
+                    'Shopify-Authenticate' => str_replace('Bearer ', '', $request->header('Authorization', '')),
+                    'Shop-Url' => $session->getShop()
+                ],
+                json_encode(['shop_url' => $session->getShop()])
+            ]);
+            $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app',
+                [RequestOptions::JSON => ['shop_url' => $session->getShop()]]);
+            $data = json_decode($response->getBody()->getContents());
+            return response()->json($data);
+        } catch (Exception $exception) {
+            logger()->error('Post login failed: ' . $exception->getMessage());
+            return response()->json([]);
+        }
     }
 
     public function register($shop, $sessionToken)
@@ -73,12 +79,8 @@ class AppController extends Controller
             $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/authorize-app', [
                 RequestOptions::JSON => ['user_id' => $user->id]
             ]);
-            $result = $response->getBody()->getContents();
-            $response = json_decode($result);
-            dd($response);
-            return response()->json([
-                'data' => optional($response)->redirect_url
-            ]);
+            $data = json_decode($response->getBody()->getContents());
+            return response()->json($data);
         } catch (GuzzleException $e) {
             logger()->error('Cant post register shop: ' . $e->getMessage());
         }
