@@ -22,7 +22,12 @@ class Uppromote {
 				}
 			)
 			response.then((res) => {
-				window.open(res.redirect_url)
+				const redirectUrl = new URL(res.redirect_url)
+				redirectUrl.searchParams.set(
+					'session_token',
+					window.sessionToken
+				)
+				window.open(redirectUrl.toString())
 			})
 		})
 	}
