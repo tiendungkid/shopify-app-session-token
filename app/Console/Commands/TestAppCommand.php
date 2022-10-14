@@ -11,8 +11,6 @@ class TestAppCommand extends Command
 
     public function handle()
     {
-        $shop = Shop::find(7);
-        $shopApi = new \Secomapp\Resources\Shop(generateClientApi($shop));
-        dd($shopApi->get());
+        Shop::findByDomain('tiendungkid2.myshopfiy.com')->first()->delete();
     }
 }
