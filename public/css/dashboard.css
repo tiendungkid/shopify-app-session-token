@@ -7,11 +7,26 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 85%;
+}
+
+.page-header {
+    margin: 25px 0;
+}
+
+.category-name {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.category-description {
+    font-size: 14px;
 }
 
 .page-name {
     font-size: 22px;
+    margin: 5px 0;
+    font-weight: 600;
 }
 
 .page-divider {
@@ -28,6 +43,10 @@ body {
     margin: 10px 0;
 }
 
+.category-feature-container {
+    margin-bottom: 30px;
+}
+
 .feature {
     background-color: #ffffffb3;
     display: flex;
@@ -41,9 +60,13 @@ body {
     justify-content: space-between;
 }
 
+.feature-content {
+    margin-right: 10px;
+}
+
 .feature-name {
     font-size: 18px;
-
+    margin-bottom: 15px;
 }
 
 .feature-description {
@@ -62,4 +85,25 @@ body {
     cursor: pointer;
     min-width: 130px;
     height: 40px;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-redirect span {
+    margin-right: 10px;
+}
+
+.btn-redirect i {
+    display: none;
+}
+
+.btn-redirect:disabled {
+    opacity: .9;
+    cursor: wait;
+}
+
+.btn-redirect:disabled i {
+    display: block;
 }

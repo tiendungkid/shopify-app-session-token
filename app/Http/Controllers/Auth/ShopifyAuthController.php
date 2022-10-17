@@ -62,26 +62,30 @@ class ShopifyAuthController extends Controller
     }
 
     /**
-     * @throws OAuthSessionNotFoundException
+     * @throws HttpRequestException
+     * @throws OAuthCookieNotFoundException
+     * @throws InvalidOAuthException
      * @throws UninitializedContextException
      * @throws PrivateAppException
      * @throws SessionStorageException
-     * @throws OAuthCookieNotFoundException
-     * @throws HttpRequestException
-     * @throws InvalidOAuthException
+     * @throws OAuthSessionNotFoundException
      */
     public function authCallback(Request $request)
     {
+        $host = $request->query('host');
+        $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $session = OAuth::callback(
             $request->cookie(),
             $request->query(),
             [CookieHandler::class, 'saveShopifyCookie']
         );
-        $host = $request->query('host');
-        $shop = Utils::sanitizeShopDomain($request->query('shop'));
+        $apiKey = Context::$API_KEY;
         $handler = new AppInstalledHandler;
         $handler->installShop($shop, $session->getAccessToken());
-        return view('pages.register', compact('host', 'shop') + ['justInstalled' => 1]);
+        $credentials = compact('shop', 'host', 'apiKey');
+        return $handler->registered($shop)
+            ? view('pages.dashboard', $credentials)
+            : view('pages.register', $credentials);
     }
 
     /**
@@ -92,12 +96,16 @@ class ShopifyAuthController extends Controller
     {
         abort_if(!$request->query('shop'), 404);
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
-        $host = $request->query('host');
+        $host = Context::$HOST_NAME;
         $apiKey = Context::$API_KEY;
         $handler = new AppInstalledHandler;
         $installed = $handler->appInstalled($shop);
+        $credentials = compact('shop', 'host', 'apiKey');
+        $pageView = $handler->registered($shop)
+            ? view('pages.dashboard', $credentials)
+            : view('pages.register', $credentials);
         return $installed
-            ? view('pages.dashboard', compact('shop', 'host', 'apiKey'))
+            ? $pageView
             : redirect("/login?shop=$shop");
     }
 }

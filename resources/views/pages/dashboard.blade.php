@@ -21,7 +21,8 @@
                                     <div class="feature-description">{{ $feature['text'] }}</div>
                                 </div>
                                 <button class="btn btn-redirect" data-redirect-url="{{ $feature['button_link'] }}">
-                                    {{ $feature['button_text'] }}
+                                    <span>{{ $feature['button_text'] }}</span>
+                                    <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
                                 </button>
                             </div>
                         @endforeach
@@ -30,4 +31,7 @@
             @endforeach
         </div>
     </div>
+@endsection
+@section('footer')
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 @endsection

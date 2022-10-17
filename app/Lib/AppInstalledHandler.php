@@ -4,10 +4,6 @@ namespace App\Lib;
 
 use App\Models\Auth\User;
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
-use Secomapp\Models\Plan;
 use Secomapp\Models\Shop;
 use Secomapp\Traits\Authenticator;
 use Secomapp\Traits\InstalledShop;
@@ -119,5 +115,15 @@ class AppInstalledHandler
     {
         $shop->uninstall()->deactivate()->save();
         // TODO: Call uninstall listener api
+    }
+
+    public function registered(string $shop): bool
+    {
+        $shop = Shop::findByDomain($shop)->first();
+        $user = User::query()
+            ->where('shop_id', '=', $shop->id)
+            ->oldest('created_at')
+            ->first();
+        return (bool)optional($user)->email;
     }
 }

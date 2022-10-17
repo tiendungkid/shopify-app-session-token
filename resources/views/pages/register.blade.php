@@ -6,7 +6,7 @@
     <div class="container">
         <div class="slider-container">
             <div class="slider-content">
-                <i class="fas fa-quote-left"></i>
+                <i class="fa fa-quote-left" aria-hidden="true"></i>
                 <div>
                     <p class="slider-text">
                         The app is incredibly easy to install and makes the learning curve less intense. In would
@@ -29,7 +29,7 @@
                         We hope that we will be a trusting partner on your success journey.
                     </p>
                     <p>
-                        Register an account now and start building your campaign with UpPromote.
+                        Dashboard an account now and start building your campaign with UpPromote.
                     </p>
                 </div>
                 <button class="btn btn-register">Register now</button>

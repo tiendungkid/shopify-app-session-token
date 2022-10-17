@@ -39,6 +39,7 @@ class AppController extends Controller
             );
         }
         try {
+            $redirectUrl = $request->get('redirect_url', '/admin');
             $client = new Client([
                 'allow_redirects' => false,
                 'verify' => false,
@@ -50,8 +51,15 @@ class AppController extends Controller
                 ],
                 json_encode(['shop_url' => $session->getShop()])
             ]);
-            $response = $client->post(config('shopify.uppromote_app_url') . '/api/v1/login-app',
-                [RequestOptions::JSON => ['shop_url' => $session->getShop()]]);
+            $response = $client->post(
+                config('shopify.uppromote_app_url') . '/api/v1/login-app',
+                [
+                    RequestOptions::JSON => [
+                        'shop_url' => $session->getShop(),
+                        'redirect_url' => $redirectUrl
+                    ]
+                ]
+            );
             $data = json_decode($response->getBody()->getContents());
             return response()->json($data);
         } catch (Exception $exception) {
