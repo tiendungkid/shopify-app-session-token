@@ -81,7 +81,7 @@ class ShopifyAuthController extends Controller
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $handler = new AppInstalledHandler;
         $handler->installShop($shop, $session->getAccessToken());
-        return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop, 'just_installed' => 1]));
+        return view('pages.register', compact('host', 'shop') + ['justInstalled' => 1]);
     }
 
     /**
@@ -93,12 +93,11 @@ class ShopifyAuthController extends Controller
         abort_if(!$request->query('shop'), 404);
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
         $host = $request->query('host');
-        $justInstalled = $request->query('just_installed', 0);
         $apiKey = Context::$API_KEY;
         $handler = new AppInstalledHandler;
         $installed = $handler->appInstalled($shop);
         return $installed
-            ? view('pages.start-page', compact('shop', 'host', 'apiKey', 'justInstalled'))
+            ? view('pages.dashboard', compact('shop', 'host', 'apiKey'))
             : redirect("/login?shop=$shop");
     }
 }

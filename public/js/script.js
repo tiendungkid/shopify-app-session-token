@@ -1,8 +1,7 @@
 class Uppromote {
-	constructor({ shop, host, justInstalled }) {
+	constructor({ shop, host }) {
 		this.shop = shop
 		this.host = host
-		this.justInstalled = justInstalled
 	}
 
 	initialize() {
@@ -18,7 +17,6 @@ class Uppromote {
 				'POST',
 				{
 					shop: this.shop,
-					just_installed: this.justInstalled,
 				}
 			)
 			response.then((res) => {
