@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Lib\AppInstalledHandler;
 use App\Lib\CookieHandler;
+use Exception;
 use Illuminate\Http\Request;
 use Shopify\Auth\OAuth;
 use Shopify\Context;
@@ -62,30 +63,27 @@ class ShopifyAuthController extends Controller
     }
 
     /**
-     * @throws HttpRequestException
-     * @throws OAuthCookieNotFoundException
-     * @throws InvalidOAuthException
+     * @throws OAuthSessionNotFoundException
      * @throws UninitializedContextException
      * @throws PrivateAppException
      * @throws SessionStorageException
-     * @throws OAuthSessionNotFoundException
+     * @throws OAuthCookieNotFoundException
+     * @throws HttpRequestException
+     * @throws InvalidOAuthException
      */
     public function authCallback(Request $request)
     {
         $host = $request->query('host');
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
+        $apiKey = Context::$API_KEY;
         $session = OAuth::callback(
             $request->cookie(),
             $request->query(),
             [CookieHandler::class, 'saveShopifyCookie']
         );
-        $apiKey = Context::$API_KEY;
         $handler = new AppInstalledHandler;
         $handler->installShop($shop, $session->getAccessToken());
-        $credentials = compact('shop', 'host', 'apiKey');
-        return $handler->registered($shop)
-            ? view('pages.dashboard', $credentials)
-            : view('pages.register', $credentials);
+        return redirect('?' . http_build_query(['host' => $host, 'shop' => $shop]));
     }
 
     /**
@@ -96,7 +94,7 @@ class ShopifyAuthController extends Controller
     {
         abort_if(!$request->query('shop'), 404);
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
-        $host = Context::$HOST_NAME;
+        $host = $request->query('host');
         $apiKey = Context::$API_KEY;
         $handler = new AppInstalledHandler;
         $installed = $handler->appInstalled($shop);
