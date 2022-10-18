@@ -31,7 +31,6 @@ class AppController extends Controller
      */
     public function login(Request $request)
     {
-        info('111');
         $session = Utils::loadCurrentSession($request->header(), $request->cookie(), 'online');
         if ($request->get('just_installed', 0) == 1) {
             return $this->register(
@@ -67,14 +66,17 @@ class AppController extends Controller
             $data = json_decode($response->getBody()->getContents());
             return response()->json($data);
         } catch (Exception $exception) {
-            logger()->error('Post login failed: ' . $exception->getMessage());
-            return response()->json([]);
+            return response()->json([
+                'status' => 'expired'
+            ], 401);
         }
     }
 
     public function register($shop, $sessionToken)
     {
-        $emptyResponse = response()->json([]);
+        $emptyResponse = response()->json([
+            'status' => 'expired'
+        ], 401);
         try {
             $shopModel = Shop::findByDomain($shop)->first();
             if (!$shopModel) return $emptyResponse;
@@ -94,8 +96,7 @@ class AppController extends Controller
             $data = json_decode($response->getBody()->getContents());
             return response()->json($data);
         } catch (GuzzleException $e) {
-            logger()->error('Cant post register shop: ' . $e->getMessage());
+            return $emptyResponse;
         }
-        return $emptyResponse;
     }
 }

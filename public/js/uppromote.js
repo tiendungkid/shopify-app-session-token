@@ -40,6 +40,12 @@ class Uppromote {
 		})
 		return (await response.json()) || null
 	}
+
+	reloadApp() {
+		redirect.dispatch(Redirect.Action.APP, {
+			path: `/login?shop=${this.shop}`,
+		})
+	}
 }
 
 const appRoot = document.getElementById('app')

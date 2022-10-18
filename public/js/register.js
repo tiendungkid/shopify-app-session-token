@@ -24,6 +24,10 @@ class Register {
 	}
 
 	redirectApp(response) {
+		if (response.status === 'expired') {
+			uppromote.reloadApp()
+			return
+		}
 		const redirectUrl = new URL(response.redirect_url)
 		redirectUrl.searchParams.set('session_token', window.sessionToken)
 		try {

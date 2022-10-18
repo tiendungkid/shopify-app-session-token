@@ -20,11 +20,11 @@
 		window.sessionToken = res
 	})
 
-	// setInterval(() => {
-	// 	getSessionToken(app).then(res => {
-	// 		window.sessionToken = res
-	// 	})
-	// }, 3e4)
+	setInterval(() => {
+		getSessionToken(app).then(res => {
+			window.sessionToken = res
+		})
+	}, 3e4)
 
 	function bootApp() {
 		document.body.removeAttribute('style')
