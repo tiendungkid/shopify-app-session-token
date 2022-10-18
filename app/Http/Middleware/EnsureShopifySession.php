@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Exception;
+use Firebase\JWT\ExpiredException;
 use Illuminate\Http\Request;
 use Shopify\Clients\Graphql;
 use Shopify\Context;
@@ -56,7 +57,13 @@ class EnsureShopifySession
         }
 
         $shop = Utils::sanitizeShopDomain($request->query('shop', ''));
-        $session = Utils::loadCurrentSession($request->header(), $request->cookie(), $isOnline);
+        try {
+            $session = Utils::loadCurrentSession($request->header(), $request->cookie(), $isOnline);
+        } catch (ExpiredException $exception) {
+            return response()->json([
+                'status' => 'expired',
+            ], 401);
+        }
 
         if ($session && $shop && $session->getShop() !== $shop) {
             // This request is for a different shop. Go straight to login

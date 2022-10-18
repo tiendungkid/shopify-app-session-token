@@ -16,17 +16,15 @@
 		return await AppBridgeUtils.getSessionToken(app)
 	}
 
-	setTimeout(() => {
-		getSessionToken(app).then(res => {
-			window.sessionToken = res
-		})
+	getSessionToken(app).then(res => {
+		window.sessionToken = res
+	})
 
-		setInterval(() => {
-			getSessionToken(app).then(res => {
-				window.sessionToken = res
-			})
-		}, 3e4)
-	}, 1e3)
+	// setInterval(() => {
+	// 	getSessionToken(app).then(res => {
+	// 		window.sessionToken = res
+	// 	})
+	// }, 3e4)
 
 	function bootApp() {
 		document.body.removeAttribute('style')

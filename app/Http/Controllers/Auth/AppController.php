@@ -31,6 +31,7 @@ class AppController extends Controller
      */
     public function login(Request $request)
     {
+        info('111');
         $session = Utils::loadCurrentSession($request->header(), $request->cookie(), 'online');
         if ($request->get('just_installed', 0) == 1) {
             return $this->register(
@@ -59,7 +60,7 @@ class AppController extends Controller
                 [
                     RequestOptions::JSON => [
                         'shop_url' => $session->getShop(),
-                        'redirect_url' => $redirectUrl
+                        'redirect_url' => urlencode($redirectUrl)
                     ]
                 ]
             );
