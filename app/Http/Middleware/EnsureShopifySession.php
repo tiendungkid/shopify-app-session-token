@@ -62,6 +62,7 @@ class EnsureShopifySession
         } catch (ExpiredException $exception) {
             return response()->json([
                 'status' => 'expired',
+                'expired_form' => 'middleware'
             ], 401);
         }
 
