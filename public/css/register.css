@@ -62,7 +62,7 @@ body {
     font-size: 16px;
 }
 
-.welcome-container .btn-register {
+.btn-register {
     padding: 15px 20px;
     font-weight: bold;
     font-size: 14px;
@@ -73,11 +73,23 @@ body {
     outline: none;
     border: none;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-register i {
+    display: none;
+    margin-left: 8px;
+    align-self: center;
 }
 
 .btn-register:disabled {
     opacity: .8;
     cursor: wait;
+}
+
+.btn-register:disabled i {
+    display: block;
 }
 
 @media screen and (max-width: 968px) {

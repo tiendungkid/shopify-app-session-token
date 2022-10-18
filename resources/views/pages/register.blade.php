@@ -32,11 +32,14 @@
                         Dashboard an account now and start building your campaign with UpPromote.
                     </p>
                 </div>
-                <button class="btn btn-register">Register now</button>
+                <button class="btn btn-register">
+                    <span>Register now</span>
+                    <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
     </div>
 @endsection
 @section('footer')
-
+    <script src="{{ asset('js/register.js') }}"></script>
 @endsection

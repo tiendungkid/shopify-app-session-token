@@ -1,37 +1,29 @@
-class Dashboard {
+class Register {
 	constructor() {
-		this.registerButton = [
-			...document.querySelectorAll('button.btn-redirect'),
-		]
+		this.registerButton = document.querySelector('button.btn-register')
 	}
 
-	initialize() {
+	init() {
 		this.addEventListener()
 	}
 
 	addEventListener() {
-		this.registerButton.forEach((btn) => {
-			btn.addEventListener('click', () => {
-				this.onGetLinkButtonClicked(btn)
-			})
-		})
-	}
-
-	onGetLinkButtonClicked(btn) {
-		btn.disabled = true
-		uppromote
-			.fetchAndGetContent(
+		if (!this.registerButton) return
+		this.registerButton.addEventListener('click', () => {
+			this.registerButton.disabled = true
+			const response = uppromote.fetchAndGetContent(
 				`/api/auth/login?shop=${uppromote.shop}`,
 				'POST',
 				{
 					shop: uppromote.shop,
-					redirect_url: btn.dataset.redirectUrl,
+					just_installed: 1,
 				}
 			)
-			.then((res) => this.redirectApp(res, btn))
+			response.then((res) => this.redirectApp(res))
+		})
 	}
 
-	redirectApp(response, button) {
+	redirectApp(response) {
 		const redirectUrl = new URL(response.redirect_url)
 		redirectUrl.searchParams.set('session_token', window.sessionToken)
 		try {
@@ -45,9 +37,9 @@ class Dashboard {
 			)
 			console.error(e)
 		}
-		button.disabled = false
+		this.registerButton.disabled = false
 	}
 }
 
-const register = new Dashboard()
-register.initialize()
+const register = new Register()
+register.init()

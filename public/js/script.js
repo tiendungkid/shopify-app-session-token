@@ -5,29 +5,7 @@ class Uppromote {
 	}
 
 	initialize() {
-		this.addEventListener()
-	}
-
-	addEventListener() {
-		const openAppButton = document.getElementById('open-app')
-		if (!openAppButton) return
-		openAppButton.addEventListener('click', () => {
-			const response = this.fetchAndGetContent(
-				`/api/auth/login?shop=${this.shop}`,
-				'POST',
-				{
-					shop: this.shop,
-				}
-			)
-			response.then((res) => {
-				const redirectUrl = new URL(res.redirect_url)
-				redirectUrl.searchParams.set(
-					'session_token',
-					window.sessionToken
-				)
-				window.open(redirectUrl.toString())
-			})
-		})
+		console.log(`> UpPromote - Affiliate Marketing: initialize`)
 	}
 
 	/**

@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     @yield('head')
 </head>
-<body>
+<body style="display: none">
 <div id="app" data-shop="{{ $shop }}" data-api-key="{{ $apiKey }}" data-host="{{ $host }}"
      data-shop-origin="{{ $shop }}">
 </div>
