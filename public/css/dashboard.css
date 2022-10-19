@@ -107,3 +107,27 @@ body {
 .btn-redirect:disabled i {
     display: block;
 }
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+
+    .feature {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .feature-content {
+        width: 100%;
+    }
+
+    .feature-name {
+        text-align: center;
+    }
+
+    .btn-redirect {
+        width: 100%;
+        margin-top: 15px;
+    }
+}

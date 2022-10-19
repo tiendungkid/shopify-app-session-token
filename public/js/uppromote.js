@@ -38,6 +38,10 @@ class Uppromote {
 			},
 			body: formData,
 		})
+		if (response.status === 302) {
+			this.reloadApp()
+			return null
+		}
 		return (await response.json()) || null
 	}
 
